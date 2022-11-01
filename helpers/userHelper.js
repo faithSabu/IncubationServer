@@ -1,5 +1,7 @@
 const USERS = require('../model/schema').users
+const APPLICATION = require('../model/schema').applications
 const bcrypt = require('bcrypt')
+const { response } = require('express')
 
 module.exports = {
 
@@ -7,7 +9,6 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             // let emailExist = await USERS.findOne({email:userData.email})
             let emailerr = await USERS.count({ email: userData.email }) > 0
-            console.log(emailerr);
             if (emailerr) {
                 resolve({ emailerr })
             } else {
@@ -20,7 +21,6 @@ module.exports = {
                     password: password,
                     timeStamp: new Date()
                 }).save().then((response) => {
-                    console.log(response, 'response at signup');
                     resolve(response);
                 })
             }
@@ -33,7 +33,7 @@ module.exports = {
             if(userData){
                 bcrypt.compare(loginData.password,userData.password).then((status)=>{
                     if(status){
-                        resolve({login:true})
+                        resolve({login:true,userData})
                     }else{
                         resolve({login:false})
                     }
@@ -41,6 +41,17 @@ module.exports = {
             }else{
                 resolve({login:false})
             }
+        })
+    },
+
+    submitApplication:(formData)=>{
+        return new Promise(async(resolve,reject)=>{
+            await new APPLICATION({
+                ...formData,
+                timeStamp: new Date()
+            }).save().then((response)=>{
+                resolve(response)
+            })
         })
     }
 
