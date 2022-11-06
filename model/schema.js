@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema(
         email:String,
         phone:Number,
         password:String,
-        timeStamp:Date
+        timeStamp:Date,
     }
 )
 const users = mongoose.model('users', userSchema);
@@ -34,11 +34,23 @@ const applicationSchema = mongoose.Schema(
         j:String,
         typeOfIncubation:String,
         userId:String,
-        timeStamp:Date
+        status:String,
+        view:Boolean,
+        timeStamp:Date,
+        approvalStatus:String,
     })
     const applications = mongoose.model('applications',applicationSchema);
 
+const slotSchema = mongoose.Schema({
+    roomNumber:Number,
+    slotNumber:Number,
+    occupied:Boolean,
+    companyId:mongoose.Schema.Types.ObjectId,
+})
+const slotdatas = mongoose.model('slotdatas',slotSchema);
+
 module.exports = {
     users,
-    applications
+    applications,
+    slotdatas,
 }
